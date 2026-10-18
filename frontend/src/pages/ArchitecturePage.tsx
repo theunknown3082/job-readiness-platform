@@ -24,17 +24,17 @@ export const ArchitecturePage: React.FC = () => {
   const simulatedRetention = Math.round(Math.exp(-0.015 * simulatorDays) * 1000) / 10;
 
   return (
-    <div className="max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 py-10 space-y-12 animate-in fade-in duration-300">
+    <div className="max-w-[1536px] mx-auto px-3 sm:px-8 lg:px-12 py-6 sm:py-10 space-y-8 sm:space-y-12 animate-in fade-in duration-300">
       {/* Hero / Header */}
-      <div className="border-b border-zinc-200 dark:border-zinc-800 pb-8">
+      <div className="border-b border-zinc-200 dark:border-zinc-800 pb-6 sm:pb-8">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/10 text-brand-600 dark:text-brand-400 border border-brand-500/20 mb-3">
           <Sparkles className="w-3.5 h-3.5" />
           System Low-Level Design & Mathematical Spec
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
           How the Platform Works: Architecture & Algorithms
         </h1>
-        <p className="text-base text-zinc-600 dark:text-zinc-400 mt-2 max-w-3xl leading-relaxed">
+        <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 mt-2 max-w-3xl leading-relaxed">
           An in-depth technical walk-through of the backend service architecture, relational database schemas, memory retention decay models, and production design decisions.
         </p>
       </div>

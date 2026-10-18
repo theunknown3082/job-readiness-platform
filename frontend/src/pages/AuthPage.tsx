@@ -59,17 +59,17 @@ export const AuthPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-8rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-[calc(100vh-8rem)] flex items-center justify-center py-6 sm:py-12 px-3 sm:px-6 lg:px-8">
       <div className="w-full max-w-md">
         {/* Brand Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex w-12 h-12 rounded-2xl bg-zinc-900 dark:bg-zinc-100 items-center justify-center text-white dark:text-zinc-900 font-bold text-lg shadow-sm mb-4">
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="inline-flex w-12 h-12 rounded-2xl bg-zinc-900 dark:bg-zinc-100 items-center justify-center text-white dark:text-zinc-900 font-bold text-lg shadow-sm mb-3 sm:mb-4">
             JR
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
             {isLogin ? 'Welcome back' : 'Create an account'}
           </h2>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+          <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
             {isLogin
               ? 'Sign in to access your interview readiness dashboard'
               : 'Start tracking preparation with retention decay metrics'}
@@ -77,7 +77,7 @@ export const AuthPage: React.FC = () => {
         </div>
 
         {/* Card */}
-        <div className="bg-white dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-apple dark:shadow-apple-dark transition-all">
+        <div className="bg-white dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-apple dark:shadow-apple-dark transition-all">
           {/* Tab Selector */}
           <div className="grid grid-cols-2 p-1 bg-zinc-100 dark:bg-zinc-800/60 rounded-xl mb-6">
             <button
@@ -230,7 +230,7 @@ export const AuthPage: React.FC = () => {
             <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2 text-center">
               Quick Fill Seeded Accounts
             </p>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => fillQuickCredentials('candidate@prep.dev', 'CandidatePass123!')}

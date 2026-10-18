@@ -206,13 +206,13 @@ export const ProblemsPage: React.FC = () => {
         </div>
 
         {/* Dropdown Filters */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
           {/* Category Dropdown */}
-          <div className="relative">
+          <div className="relative flex-1 sm:flex-initial">
             <select
               value={selectedCategory}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className="appearance-none pl-3 pr-8 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-xs font-medium text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 transition-all"
+              className="w-full appearance-none pl-3 pr-8 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-xs font-medium text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 transition-all"
             >
               {CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
@@ -227,7 +227,7 @@ export const ProblemsPage: React.FC = () => {
           <select
             value={selectedDifficulty}
             onChange={(e) => setSelectedDifficulty(e.target.value)}
-            className="pl-3 pr-8 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-xs font-medium text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 transition-all"
+            className="w-full sm:w-auto pl-3 pr-8 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-xs font-medium text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 transition-all"
           >
             <option value="All Difficulties">All Difficulties</option>
             <option value="Easy">Easy (1.0x)</option>
@@ -237,47 +237,31 @@ export const ProblemsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Problems Data Table */}
+      {/* Problems Data Container */}
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-apple dark:shadow-apple-dark overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-zinc-50 dark:bg-zinc-950/60 border-b border-zinc-200 dark:border-zinc-800 text-xs uppercase tracking-wider text-zinc-400 font-semibold">
-              <tr>
-                <th className="py-3.5 px-6">Problem</th>
-                <th className="py-3.5 px-6">Category</th>
-                <th className="py-3.5 px-6">Difficulty</th>
-                <th className="py-3.5 px-6">Your Status</th>
-                <th className="py-3.5 px-6 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-200/70 dark:divide-zinc-800/70">
-              {loading ? (
-                <tr>
-                  <td colSpan={5} className="py-12 text-center text-zinc-400 text-sm">
-                    <div className="inline-block w-6 h-6 border-2 border-zinc-300 border-t-zinc-900 dark:border-zinc-700 dark:border-t-zinc-100 rounded-full animate-spin mb-2" />
-                    <p>Loading problems catalog...</p>
-                  </td>
-                </tr>
-              ) : filteredProblems.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="py-12 text-center text-zinc-400 text-sm">
-                    No problems found matching the selected filters.
-                  </td>
-                </tr>
-              ) : (
-                paginatedProblems.map((prob) => {
-                  const userProg = userProgressMap[prob.id];
-                  const status = userProg?.status || 'Todo';
-                  const timeSpent = userProg?.time || 0;
+        {loading ? (
+          <div className="py-12 text-center text-zinc-400 text-sm">
+            <div className="inline-block w-6 h-6 border-2 border-zinc-300 border-t-zinc-900 dark:border-zinc-700 dark:border-t-zinc-100 rounded-full animate-spin mb-2" />
+            <p>Loading problems catalog...</p>
+          </div>
+        ) : filteredProblems.length === 0 ? (
+          <div className="py-12 text-center text-zinc-400 text-sm">
+            No problems found matching the selected filters.
+          </div>
+        ) : (
+          <>
+            {/* Mobile Cards View (Phones & Small screens) */}
+            <div className="block md:hidden divide-y divide-zinc-200/70 dark:divide-zinc-800/70">
+              {paginatedProblems.map((prob) => {
+                const userProg = userProgressMap[prob.id];
+                const status = userProg?.status || 'Todo';
+                const timeSpent = userProg?.time || 0;
 
-                  return (
-                    <tr
-                      key={prob.id}
-                      className="hover:bg-zinc-50/60 dark:hover:bg-zinc-800/40 transition-colors group"
-                    >
-                      {/* Problem Title & Source */}
-                      <td className="py-4 px-6 font-medium text-zinc-900 dark:text-zinc-100">
-                        <div className="flex items-center gap-2">
+                return (
+                  <div key={prob.id} className="p-4 space-y-3 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-1.5 font-medium text-zinc-900 dark:text-zinc-100 text-sm">
                           <span>{prob.title}</span>
                           {prob.source_url && (
                             <a
@@ -285,58 +269,133 @@ export const ProblemsPage: React.FC = () => {
                               target="_blank"
                               rel="noreferrer"
                               title="Open original problem"
-                              className="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors"
+                              className="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 p-0.5"
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
                             </a>
                           )}
                         </div>
-                      </td>
+                        <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono">
+                          {prob.category}
+                        </p>
+                      </div>
+                      <DifficultyBadge difficulty={prob.difficulty} />
+                    </div>
 
-                      {/* Category */}
-                      <td className="py-4 px-6 text-zinc-600 dark:text-zinc-400 text-xs">
-                        {prob.category}
-                      </td>
+                    <div className="flex items-center justify-between pt-1">
+                      <div className="flex items-center gap-2">
+                        <StatusBadge status={status} />
+                        {timeSpent > 0 && (
+                          <span className="text-[11px] font-mono text-zinc-400 flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            {timeSpent}m
+                          </span>
+                        )}
+                      </div>
 
-                      {/* Difficulty Badge */}
-                      <td className="py-4 px-6">
-                        <DifficultyBadge difficulty={prob.difficulty} />
-                      </td>
+                      <button
+                        onClick={() => {
+                          setSelectedProblemForLog(prob);
+                          setLogStatus(status === 'Todo' ? 'Completed' : status);
+                          setLogTimeSpent(30);
+                        }}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-900 hover:text-white dark:hover:bg-white dark:hover:text-zinc-900 transition-all shadow-subtle"
+                      >
+                        <CheckCircle className="w-3.5 h-3.5" />
+                        <span>Update</span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
-                      {/* User Progress Status */}
-                      <td className="py-4 px-6">
-                        <div className="flex items-center gap-2">
-                          <StatusBadge status={status} />
-                          {timeSpent > 0 && (
-                            <span className="text-[11px] font-mono text-zinc-400 flex items-center gap-1">
-                              <Clock className="w-3 h-3" />
-                              {timeSpent}m
-                            </span>
-                          )}
-                        </div>
-                      </td>
+            {/* Desktop & Tablet Table View */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-zinc-50 dark:bg-zinc-950/60 border-b border-zinc-200 dark:border-zinc-800 text-xs uppercase tracking-wider text-zinc-400 font-semibold">
+                  <tr>
+                    <th className="py-3.5 px-6">Problem</th>
+                    <th className="py-3.5 px-6">Category</th>
+                    <th className="py-3.5 px-6">Difficulty</th>
+                    <th className="py-3.5 px-6">Your Status</th>
+                    <th className="py-3.5 px-6 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-200/70 dark:divide-zinc-800/70">
+                  {paginatedProblems.map((prob) => {
+                    const userProg = userProgressMap[prob.id];
+                    const status = userProg?.status || 'Todo';
+                    const timeSpent = userProg?.time || 0;
 
-                      {/* Action Button */}
-                      <td className="py-4 px-6 text-right">
-                        <button
-                          onClick={() => {
-                            setSelectedProblemForLog(prob);
-                            setLogStatus(status === 'Todo' ? 'Completed' : status);
-                            setLogTimeSpent(30);
-                          }}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-900 hover:text-white dark:hover:bg-white dark:hover:text-zinc-900 transition-all shadow-subtle"
-                        >
-                          <CheckCircle className="w-3.5 h-3.5" />
-                          <span>Update</span>
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
+                    return (
+                      <tr
+                        key={prob.id}
+                        className="hover:bg-zinc-50/60 dark:hover:bg-zinc-800/40 transition-colors group"
+                      >
+                        {/* Problem Title & Source */}
+                        <td className="py-4 px-6 font-medium text-zinc-900 dark:text-zinc-100">
+                          <div className="flex items-center gap-2">
+                            <span>{prob.title}</span>
+                            {prob.source_url && (
+                              <a
+                                href={prob.source_url}
+                                target="_blank"
+                                rel="noreferrer"
+                                title="Open original problem"
+                                className="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors"
+                              >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                              </a>
+                            )}
+                          </div>
+                        </td>
+
+                        {/* Category */}
+                        <td className="py-4 px-6 text-zinc-600 dark:text-zinc-400 text-xs">
+                          {prob.category}
+                        </td>
+
+                        {/* Difficulty Badge */}
+                        <td className="py-4 px-6">
+                          <DifficultyBadge difficulty={prob.difficulty} />
+                        </td>
+
+                        {/* User Progress Status */}
+                        <td className="py-4 px-6">
+                          <div className="flex items-center gap-2">
+                            <StatusBadge status={status} />
+                            {timeSpent > 0 && (
+                              <span className="text-[11px] font-mono text-zinc-400 flex items-center gap-1">
+                                <Clock className="w-3 h-3" />
+                                {timeSpent}m
+                              </span>
+                            )}
+                          </div>
+                        </td>
+
+                        {/* Action Button */}
+                        <td className="py-4 px-6 text-right">
+                          <button
+                            onClick={() => {
+                              setSelectedProblemForLog(prob);
+                              setLogStatus(status === 'Todo' ? 'Completed' : status);
+                              setLogTimeSpent(30);
+                            }}
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-900 hover:text-white dark:hover:bg-white dark:hover:text-zinc-900 transition-all shadow-subtle"
+                          >
+                            <CheckCircle className="w-3.5 h-3.5" />
+                            <span>Update</span>
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
 
         {/* Table Footer Count & Pagination */}
         <div className="p-4 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/40 text-xs text-zinc-500 flex flex-col sm:flex-row items-center justify-between gap-3">
