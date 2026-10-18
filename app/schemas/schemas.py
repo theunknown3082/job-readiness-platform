@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 from app.models.models import DifficultyLevel, ProblemStatus, UserRole
 
@@ -11,23 +11,25 @@ class UserCreate(BaseModel):
     full_name: str | None = None
     role: UserRole | None = UserRole.CANDIDATE
 
+
 class UserResponse(BaseModel):
     id: int
     email: EmailStr
     full_name: str | None
     role: UserRole
     created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        from_attributes = True
 
 class Token(BaseModel):
     access_token: str
     token_type: str
 
+
 class TokenData(BaseModel):
     email: str | None = None
     role: str | None = None
+
 
 class ProblemCreate(BaseModel):
     title: str = Field(examples=["Two Sum"])
@@ -35,16 +37,17 @@ class ProblemCreate(BaseModel):
     difficulty: DifficultyLevel
     source_url: str | None = None
 
+
 class ProblemResponse(ProblemCreate):
     id: int
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        from_attributes = True
 
 class ProgressUpdate(BaseModel):
     problem_id: int
     status: ProblemStatus
     time_spent_minutes: int = Field(ge=0, default=0)
+
 
 class ProgressResponse(BaseModel):
     id: int
@@ -52,18 +55,21 @@ class ProgressResponse(BaseModel):
     status: ProblemStatus
     time_spent_minutes: int
     updated_at: datetime
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        from_attributes = True
 
 class CategoryReadiness(BaseModel):
     category: str
     total_problems: int
     completed_problems: int
     completion_rate: float
+    effective_score: float
+
 
 class ReadinessReport(BaseModel):
     overall_score: float
+    retention_score: float
     total_solved: int
     total_problems: int
+    target_role_match_pct: float
     category_breakdown: list[CategoryReadiness]
