@@ -50,6 +50,15 @@ export const Footer: React.FC = () => {
             Job Readiness & Skill Tracking Platform • Designed & Built with Clean Architecture Principles
           </p>
           <div className="flex items-center gap-4 mt-2 sm:mt-0 font-mono">
+            <a
+              href={`${import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000'}/docs`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white underline decoration-zinc-400/50 underline-offset-2 flex items-center gap-1 transition-colors"
+            >
+              Interactive Swagger API Docs ↗
+            </a>
+            <span>•</span>
             <span>OAuth2 Form Auth</span>
             <span>•</span>
             <span>SQLAlchemy ORM</span>

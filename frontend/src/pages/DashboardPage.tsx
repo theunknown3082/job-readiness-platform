@@ -15,6 +15,8 @@ import {
   HelpCircle,
   Clock,
   Sparkles,
+  Share2,
+  Check,
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -31,6 +33,22 @@ export const DashboardPage: React.FC = () => {
   const [report, setReport] = useState<ReadinessReport | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopySummary = () => {
+    if (!report) return;
+    const summary = `🎯 SDE-1 Interview Readiness Summary
+Overall Score: ${report.overall_score}%
+Retention Score (Decay-Adjusted): ${report.retention_score}%
+Problems Mastered: ${report.total_solved}/${report.total_problems}
+Backend SDE-1 Benchmark Match: ${report.target_role_match_pct}%
+Model: Ebbinghaus exponential decay (lambda=0.015, non-linear weights 1x/2.5x/5x)
+Evaluated at: https://job-readiness-platform.pages.dev`;
+
+    navigator.clipboard.writeText(summary);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2200);
+  };
 
   const fetchReadiness = async () => {
     setLoading(true);
@@ -82,7 +100,16 @@ export const DashboardPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <button
+            onClick={handleCopySummary}
+            disabled={!report || loading}
+            title="Copy SDE-1 readiness stats to clipboard"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800/80 transition-all shadow-subtle disabled:opacity-50"
+          >
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Share2 className="w-3.5 h-3.5 text-zinc-400" />}
+            <span>{copied ? 'Copied to Clipboard!' : 'Export Summary'}</span>
+          </button>
           <button
             onClick={fetchReadiness}
             disabled={loading}
@@ -116,6 +143,27 @@ export const DashboardPage: React.FC = () => {
               Sign In
             </NavLink>
           )}
+        </div>
+      )}
+
+      {/* Empty State Banner if 0 solved */}
+      {report && report.total_solved === 0 && !loading && (
+        <div className="p-5 rounded-2xl bg-brand-500/5 dark:bg-brand-500/10 border border-brand-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-brand-600 dark:text-brand-400" />
+              Welcome to your Readiness Dashboard
+            </h3>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+              You haven't logged any solved problems yet. Head to the NeetCode 150 Catalog to record your first solution and start computing your spaced-repetition retention score!
+            </p>
+          </div>
+          <NavLink
+            to="/problems"
+            className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shrink-0 transition-colors"
+          >
+            Explore Catalog →
+          </NavLink>
         </div>
       )}
 

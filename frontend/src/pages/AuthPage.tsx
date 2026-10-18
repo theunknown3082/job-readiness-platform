@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { UserRole } from '../types';
@@ -12,6 +12,17 @@ export const AuthPage: React.FC = () => {
   const [role, setRole] = useState<UserRole>('candidate');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [isSlowLoading, setIsSlowLoading] = useState(false);
+
+  useEffect(() => {
+    let timer: any;
+    if (loading) {
+      timer = setTimeout(() => setIsSlowLoading(true), 3500);
+    } else {
+      setIsSlowLoading(false);
+    }
+    return () => clearTimeout(timer);
+  }, [loading]);
 
   const { login, register, toggleDemoMode } = useAuth();
   const navigate = useNavigate();
@@ -207,6 +218,11 @@ export const AuthPage: React.FC = () => {
                 </>
               )}
             </button>
+            {isSlowLoading && (
+              <p className="text-[11px] text-amber-600 dark:text-amber-400 text-center animate-pulse mt-2">
+                ⏳ Connecting to cloud microservice (free-tier servers wake up in ~20-30s on cold start)...
+              </p>
+            )}
           </form>
 
           {/* Quick Credential Helpers */}
