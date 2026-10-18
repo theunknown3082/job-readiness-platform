@@ -1,0 +1,21 @@
+from fastapi import FastAPI
+
+from app.core.database import Base, engine
+from app.routers import auth, problems, progress, readiness
+
+Base.metadata.create_all(bind=engine)
+
+app = FastAPI(
+    title="Job Readiness & Skill Tracking Platform",
+    description="Backend microservice tracking technical preparation metrics and candidate readiness.",
+    version="1.0.0"
+)
+
+app.include_router(auth.router)
+app.include_router(problems.router)
+app.include_router(progress.router)
+app.include_router(readiness.router)
+
+@app.get("/health", tags=["Health"])
+def health_check():
+    return {"status": "healthy"}
