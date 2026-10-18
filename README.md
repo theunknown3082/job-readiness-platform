@@ -12,9 +12,21 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6.svg?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4.svg?style=flat&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Pytest](https://img.shields.io/badge/Pytest-Passing%20(100%25)-0A9EDC.svg?style=flat&logo=pytest&logoColor=white)](https://docs.pytest.org/)
+[![Cloudflare Pages](https://img.shields.io/badge/Deployed%20on-Cloudflare%20Pages-F38020.svg?style=flat&logo=cloudflarepages&logoColor=white)](https://job-readiness-platform.pages.dev)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat)](LICENSE)
 
-[Live Demo](#-local-development-setup) • [Architecture Spec](#-system-architecture) • [Mathematical Models](#-core-mathematical-models) • [API Contracts](#-api-specification) • [Interview Justifications](#-engineering-trade-offs--interview-talking-points)
+<br/>
+
+### 🌐 **Live 24/7 Production Deployment**: [https://job-readiness-platform.pages.dev](https://job-readiness-platform.pages.dev)
+
+[![Cloudflare Status](https://img.shields.io/badge/Status-Live%2024%2F7-brightgreen.svg?style=flat&logo=cloudflare&logoColor=white)](https://job-readiness-platform.pages.dev)
+[![Demo Mode](https://img.shields.io/badge/Instant%20Evaluation-Demo%20Mode%20Enabled-blueviolet.svg?style=flat)](https://job-readiness-platform.pages.dev)
+
+> 💡 **Instant Testing**: You can evaluate the platform directly via the live Cloudflare deployment! On the login screen, click **"⚡ Explore in Demo Mode (Instant Access)"** for immediate client-side testing, or authenticate with pre-seeded accounts:
+> * **Candidate**: `candidate@prep.dev` / `CandidatePass123!`
+> * **Admin**: `admin@platform.dev` / `AdminPassSecure123!` *(Unlocks catalog management)*
+
+[Explore Live Deployment](https://job-readiness-platform.pages.dev) • [Architecture Spec](#-system-architecture) • [Mathematical Models](#-core-mathematical-models) • [API Contracts](#-api-specification) • [Interview Justifications](#-engineering-trade-offs--interview-talking-points)
 
 </div>
 
