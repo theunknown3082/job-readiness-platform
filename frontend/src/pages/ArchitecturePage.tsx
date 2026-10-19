@@ -39,16 +39,16 @@ export const ArchitecturePage: React.FC = () => {
         </p>
       </div>
 
-      {/* SECTION 1: Resume Technical Justification Grid */}
+      {/* SECTION 1: Core Architectural Pillars */}
       <section className="space-y-4">
         <div className="flex items-center gap-2">
           <FileCheck2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
           <h2 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-            Resume Engineering Claims & Verification
+            Core Architectural Pillars & Verification
           </h2>
         </div>
         <p className="text-xs text-zinc-500 dark:text-zinc-400">
-          Each bullet point below corresponds directly to implemented architectural patterns in the codebase.
+          Core engineering patterns and operational safeguards implemented across the platform.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -375,12 +375,12 @@ JSON Response with X-Request-ID Header`}
         </div>
       </section>
 
-      {/* SECTION 5: Production Engineering Decisions (Interview Talking Points) */}
+      {/* SECTION 5: Production Engineering Decisions & Architecture Trade-offs */}
       <section className="space-y-4">
         <div className="flex items-center gap-2">
           <Code2 className="w-5 h-5 text-brand-600 dark:text-brand-400" />
           <h2 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-            Key Architectural Decisions & Interview Talking Points
+            Key Architecture Decisions & Production Trade-offs
           </h2>
         </div>
 

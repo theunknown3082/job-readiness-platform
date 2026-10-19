@@ -2,7 +2,7 @@
 
 # 🎯 Job Readiness & Skill Tracking Platform
 
-**A production-grade, mathematically calibrated platform that quantifies software engineering interview readiness through spaced-repetition memory decay, non-linear difficulty weighting, and role benchmark alignment.**
+**A real-time skill analytics platform that models technical preparation using continuous spaced-repetition memory decay, non-linear difficulty weighting, and role benchmark profiles.**
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Python](https://img.shields.io/badge/Python-3.12%2B%20%7C%203.14-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org/)
@@ -17,29 +17,29 @@
 
 <br/>
 
-### 🌐 **Live 24/7 Production Deployment**: [https://job-readiness-platform.pages.dev](https://job-readiness-platform.pages.dev)
+### 🌐 **Live Application**: [https://job-readiness-platform.pages.dev](https://job-readiness-platform.pages.dev)
 
 [![Cloudflare Status](https://img.shields.io/badge/Status-Live%2024%2F7-brightgreen.svg?style=flat&logo=cloudflare&logoColor=white)](https://job-readiness-platform.pages.dev)
-[![Demo Mode](https://img.shields.io/badge/Instant%20Evaluation-Demo%20Mode%20Enabled-blueviolet.svg?style=flat)](https://job-readiness-platform.pages.dev)
+[![Demo Mode](https://img.shields.io/badge/Demo%20Mode-Available-blueviolet.svg?style=flat)](https://job-readiness-platform.pages.dev)
 
-> 💡 **Instant Testing**: You can evaluate the platform directly via the live Cloudflare deployment! On the login screen, click **"⚡ Explore in Demo Mode (Instant Access)"** for immediate client-side testing, or authenticate with pre-seeded accounts:
+> 💡 **Live Demo & Sandbox Access**: The application is deployed globally with zero configuration required. You can test it via **"⚡ Explore in Demo Mode"** on the login screen for instant offline evaluation, or sign in with pre-seeded sandbox accounts:
 > * **Candidate**: `candidate@prep.dev` / `CandidatePass123!`
-> * **Admin**: `admin@platform.dev` / `AdminPassSecure123!` *(Unlocks catalog management)*
+> * **Admin**: `admin@platform.dev` / `AdminPassSecure123!` *(Catalog management)*
 
-[Explore Live Deployment](https://job-readiness-platform.pages.dev) • [Architecture Spec](#-system-architecture) • [Mathematical Models](#-core-mathematical-models) • [API Contracts](#-api-specification) • [Interview Justifications](#-engineering-trade-offs--interview-talking-points)
+[Live Application](https://job-readiness-platform.pages.dev) • [System Architecture](#-system-architecture) • [Database Schema](#-relational-database-schema-3nf) • [Mathematical Models](#-core-mathematical-models) • [Engineering Decisions](#-architecture--engineering-decisions) • [API Specification](#-api-specification)
 
 </div>
 
 ---
 
-## 📌 Executive Summary & Motivation
+## 📌 Motivation & Problem Statement
 
-Traditional coding trackers treat all solved problems as static, equal milestones. This creates two critical engineering blindspots:
+Most coding and skill trackers treat completed problems as static, permanent achievements. In reality, this creates two fundamental flaws in assessing technical preparedness:
 
-1. **The Flat-Progress Fallacy**: Solving 50 Easy string manipulation problems yields an inflated sense of readiness, while complex Dynamic Programming or System Design implementations carry identical numerical weight.
-2. **The Ebbinghaus Memory Trap**: Human memory follows an exponential forgetting curve. A problem solved 90 days ago without active revision does not reflect current interview readiness.
+1. **The Flat-Progress Bias**: Solving 50 basic array manipulation exercises yields an inflated completion score, even though complex Graph or Dynamic Programming problems require vastly different cognitive effort and time.
+2. **Exponential Memory Decay**: Human recall follows an exponential forgetting curve. An algorithmic problem solved three months ago without spaced revision does not represent current retained capability.
 
-This platform bridges that gap by computing **real-time, decay-adjusted readiness metrics** backed by continuous exponential decay ($R(t) = e^{-\lambda t}$), non-linear difficulty multipliers ($1.0\times, 2.5\times, 5.0\times$), and SDE-1 backend distribution benchmarks.
+This platform bridges that gap by computing **real-time, decay-adjusted readiness metrics** driven by continuous exponential decay ($R(t) = e^{-\lambda t}$), non-linear difficulty weighting ($1.0\times, 2.5\times, 5.0\times$), and target role benchmark profiles.
 
 ---
 
@@ -126,13 +126,13 @@ $$R(t) = e^{-\lambda \cdot t}$$
 * $\lambda = 0.015$ (decay factor calibrated for technical retention)
 * $t = \text{days elapsed since last completed review}$
 
-| Days Inactive | Retained Mastery | Retention Impact |
+| Days Inactive | Retained Recall | Retention Status |
 | :--- | :--- | :--- |
-| **0 Days** | $100.0\%$ | Peak recall |
+| **0 Days** | $100.0\%$ | Complete recall |
 | **14 Days** | $81.0\%$ | Minor recall latency |
-| **30 Days** | $63.7\%$ | Noticeable decay threshold |
-| **60 Days** | $40.6\%$ | High risk of interview stumble |
-| **90 Days** | $25.9\%$ | Significant memory loss |
+| **30 Days** | $63.7\%$ | Moderate retention threshold |
+| **60 Days** | $40.6\%$ | Significant retention degradation |
+| **90 Days** | $25.9\%$ | Critical recall loss |
 
 $$\text{Retention Score} = \left(\frac{\sum_{i \in \text{Completed}} (\text{Weight}_i \times R(t_i))}{\sum_{j \in \text{Catalog}} \text{Weight}_j}\right) \times 100$$
 
@@ -148,27 +148,27 @@ $$\text{Target Match} = \sum_{k} \min\left(1.0, \frac{\text{Completed}_k}{\text{
 
 ---
 
-## 💡 Engineering Trade-Offs & Interview Talking Points
+## 💡 Architecture & Engineering Decisions
 
-### 1. Native `bcrypt` vs. `passlib`
-* **Initial State:** Used `passlib.context.CryptContext`.
-* **Issue:** `passlib` has been unmaintained since 2020 and throws internal errors on modern `bcrypt>=4.1.0`. It also silently truncates passwords beyond 72 bytes without explicit safeguards.
-* **Decision:** Migrated to native `bcrypt` (`gensalt()`, `hashpw()`, `checkpw()`), eliminating unmaintained wrappers and enforcing strict 72-byte string slicing.
+### 1. Direct `bcrypt` Integration vs. Unmaintained Wrappers
+* **Context**: Many Python templates use `passlib.context.CryptContext` for password hashing.
+* **Problem**: `passlib` has been unmaintained since 2020 and raises internal regex errors with modern `bcrypt >= 4.1.0` under Python 3.12+. Furthermore, bcrypt natively caps passwords at 72 bytes.
+* **Solution**: Standardized directly on the official `bcrypt` package (`gensalt()`, `hashpw()`, `checkpw()`), removing unnecessary abstraction layers and explicitly enforcing 72-byte slicing to avoid silent truncation.
 
-### 2. Database `GROUP BY` Aggregations vs. Python Memory Loops
-* **Initial State:** Fetched all problem records and user progress rows into Python application memory, looping across datasets to compute category statistics.
-* **Issue:** $O(N)$ data transfer over network, high memory pressure, and poor horizontal scalability as catalogs scale.
-* **Decision:** Offloaded aggregations directly to the database via SQLAlchemy `func.count()` with SQL `GROUP BY`. Python runtime execution is reserved purely for the continuous mathematical decay formula.
+### 2. Database-Level Aggregations vs. Application Memory Loops
+* **Context**: Computing category completion ratios and effective retention across large problem catalogs.
+* **Problem**: Fetching all catalog rows and user submissions into Python memory incurs $O(N)$ network transfer overhead and increases memory pressure on horizontal microservice workers.
+* **Solution**: Delegated aggregations directly to the database engine using SQLAlchemy `func.count()` and SQL `GROUP BY (category, difficulty)`. Python processes only the mathematical retention curve over the pre-aggregated results.
 
-### 3. Timezone Standardization
-* **Initial State:** Used `datetime.utcnow()`.
-* **Issue:** Deprecated in Python 3.12+ because it produces naive datetimes prone to timezone drift across distributed nodes.
-* **Decision:** Standardized on timezone-aware UTC timestamps (`datetime.now(timezone.utc)`) to ensure exact mathematical decay intervals.
+### 3. Explicit Timezone-Aware UTC Serialization
+* **Context**: Tracking completion timestamps and calculating elapsed days $t$ for exponential decay.
+* **Problem**: `datetime.utcnow()` was officially deprecated in Python 3.12 because it returns naive datetime objects that risk silent timezone drift across distributed cloud instances.
+* **Solution**: Standardized on timezone-aware UTC timestamps (`datetime.now(timezone.utc)`) across all database columns and mathematical calculations.
 
-### 4. Database Migrations with Alembic
-* **Initial State:** Relied on `Base.metadata.create_all(bind=engine)`.
-* **Issue:** Incapable of schema alterations, non-destructive rollbacks, or CI/CD migrations.
-* **Decision:** Integrated **Alembic** with version-controlled revision scripts for explicit, repeatable schema migrations.
+### 4. Version-Controlled Migrations via Alembic
+* **Context**: Schema evolution and multi-environment synchronization.
+* **Problem**: Relying on raw `Base.metadata.create_all()` is non-deterministic in production, incapable of altering existing tables, and prevents automated rollbacks.
+* **Solution**: Integrated **Alembic** with versioned migration scripts to ensure declarative, repeatable database upgrades across local development and cloud production.
 
 ---
 
@@ -260,5 +260,5 @@ All 4 test suites execute against in-memory isolated test fixtures with 100% pas
 ---
 
 <div align="center">
-<sub>Designed and engineered as a showcase of clean REST microservices, mathematical domain modeling, and modern enterprise frontend architecture.</sub>
+<sub>An open-source skill readiness and spaced-repetition analytics platform built with clean architecture and modern web standards.</sub>
 </div>
